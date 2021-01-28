@@ -2,15 +2,18 @@ import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext.js";
 import { Link } from "react-router-dom";
 
-export const AddContact = () => {
+export const EditContact = () => {
 	const { store, actions } = useContext(Context);
+	let [fullName, setFullName] = useState(store.myList[store.indexMyList].full_name);
+	let [email, setEmail] = useState(store.myList[store.indexMyList].email);
+	let [address, setAddress] = useState(store.myList[store.indexMyList].address);
+	let [phone, setPhone] = useState(store.myList[store.indexMyList].phone);
 
-	const contactInfo = () => {
+	const editingContact = () => {
 		let nameValue = document.querySelector("#name").value;
 		let emailValue = document.querySelector("#email").value;
 		let addressValue = document.querySelector("#address").value;
 		let phoneValue = document.querySelector("#phone").value;
-
 		return {
 			full_name: nameValue,
 			email: emailValue,
@@ -19,18 +22,26 @@ export const AddContact = () => {
 			phone: phoneValue
 		};
 	};
+
 	return (
 		<div className="container">
 			<div>
-				<h1 className="text-center mt-5">Add a new contact</h1>
+				<h1 className="text-center mt-5">Edit the contact</h1>
 				<form
 					onSubmit={event => {
-						actions.createNewContact(contactInfo());
+						actions.editContact(editingContact());
 						event.preventDefault();
 					}}>
 					<div className="form-group">
 						<label>Full Name</label>
-						<input type="text" className="form-control" placeholder="Full Name" id="name" value={null} />
+						<input
+							type="text"
+							className="form-control"
+							placeholder="Full Name"
+							id="name"
+							value={fullName}
+							onChange={event => setFullName(event.target.fullName)}
+						/>
 					</div>
 					<div className="form-group">
 						<label>Email</label>
@@ -39,7 +50,8 @@ export const AddContact = () => {
 							className="form-control"
 							placeholder="Enter email"
 							id="email"
-							value={null}
+							value={email}
+							onChange={event => setEmail(event.target.email)}
 						/>
 					</div>
 					<div className="form-group">
@@ -49,7 +61,8 @@ export const AddContact = () => {
 							className="form-control"
 							placeholder="Enter phone"
 							id="phone"
-							value={null}
+							value={phone}
+							onChange={event => setPhone(event.target.phone)}
 						/>
 					</div>
 					<div className="form-group">
@@ -59,7 +72,8 @@ export const AddContact = () => {
 							className="form-control"
 							placeholder="Enter address"
 							id="address"
-							value={null}
+							value={address}
+							onChange={event => setAddress(event.target.address)}
 						/>
 					</div>
 					<Link to="/">
@@ -67,8 +81,9 @@ export const AddContact = () => {
 							type="submit"
 							className="btn btn-primary form-control"
 							onClick={() => {
-								actions.createNewContact(contactInfo());
+								actions.editContact(editingContact());
 								event.preventDefault();
+								location.reload();
 							}}>
 							Save
 						</button>
