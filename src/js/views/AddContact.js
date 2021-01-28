@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { Context } from "../store/appContext.js";
 import { Link } from "react-router-dom";
 
 export const AddContact = () => {
-	const { store, actions } = useContext(Context);
+	const { actions } = useContext(Context);
 
 	const contactInfo = () => {
 		let nameValue = document.querySelector("#name").value;
@@ -19,13 +19,14 @@ export const AddContact = () => {
 			phone: phoneValue
 		};
 	};
+
 	return (
 		<div className="container">
 			<div>
 				<h1 className="text-center mt-5">Add a new contact</h1>
 				<form
 					onSubmit={event => {
-						actions.createNewContact(contactInfo());
+						actions.addContact(contactInfo());
 						event.preventDefault();
 					}}>
 					<div className="form-group">
@@ -67,7 +68,7 @@ export const AddContact = () => {
 							type="submit"
 							className="btn btn-primary form-control"
 							onClick={() => {
-								actions.createNewContact(contactInfo());
+								actions.addContact(contactInfo());
 								event.preventDefault();
 							}}>
 							Save

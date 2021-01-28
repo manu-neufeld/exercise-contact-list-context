@@ -1,25 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
-import { withRouter, Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
-import MikePhoto from "../../img/m101.jpg";
-import { Context } from "../store/appContext";
+import WomenPhoto from "../../img/women.jpg";
+import { Context } from "../store/appContext.js";
+import { Link } from "react-router-dom";
 
 export const ContactCard = props => {
-	const { store, actions } = useContext(Context);
-	const [state, setState] = useState({
-		//initialize state here
-	});
+	const { store } = useContext(Context);
 
-	const agendaContactsCard = store.myList.map((contact, index) => {
+	const contactCardReturned = store.myContactList.map((contact, index) => {
 		return (
-			<li className="list-group-item" key={index}>
+			<li className="list-group-item" key={index} id={contact.id}>
 				<div className="row w-100">
 					<div className="col-12 col-sm-6 col-md-3 px-0">
-						<img
-							src={MikePhoto}
-							alt="Mike Anamendolla"
-							className="rounded-circle mx-auto d-block img-fluid"
-						/>
+						<img src={WomenPhoto} alt="Women mural" className="rounded-circle mx-auto d-block img-fluid" />
 					</div>
 					<div className="col-12 col-sm-6 col-md-9 text-center text-sm-left">
 						<div className=" float-right">
@@ -28,7 +22,7 @@ export const ContactCard = props => {
 									className="btn"
 									onClick={() => {
 										store.idToEdit = contact.id;
-										store.indexMyList = index;
+										store.indexToEdit = index;
 									}}>
 									<i className="fas fa-pencil-alt mr-3" />
 								</button>
@@ -67,7 +61,8 @@ export const ContactCard = props => {
 			</li>
 		);
 	});
-	return agendaContactsCard;
+
+	return contactCardReturned;
 };
 
 /**

@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Context } from "../store/appContext.js";
 
 export const Modal = props => {
-	const { store, actions } = useContext(Context);
+	const { actions } = useContext(Context);
 	const [state, setState] = useState({
 		showModal: true
 	});
@@ -49,7 +49,6 @@ export const Modal = props => {
 							onClick={() => {
 								props.onClose();
 								actions.deleteContact();
-								location.reload();
 							}}>
 							Do it!
 						</button>

@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext.js";
 import { Link } from "react-router-dom";
 
 export const EditContact = () => {
 	const { store, actions } = useContext(Context);
-	let [fullName, setFullName] = useState(store.myList[store.indexMyList].full_name);
-	let [email, setEmail] = useState(store.myList[store.indexMyList].email);
-	let [address, setAddress] = useState(store.myList[store.indexMyList].address);
-	let [phone, setPhone] = useState(store.myList[store.indexMyList].phone);
+	let [fullName, setFullName] = useState(store.myContactList[store.indexToEdit].full_name);
+	let [email, setEmail] = useState(store.myContactList[store.indexToEdit].email);
+	let [address, setAddress] = useState(store.myContactList[store.indexToEdit].address);
+	let [phone, setPhone] = useState(store.myContactList[store.indexToEdit].phone);
 
 	const editingContact = () => {
 		let nameValue = document.querySelector("#name").value;
@@ -30,6 +30,7 @@ export const EditContact = () => {
 				<form
 					onSubmit={event => {
 						actions.editContact(editingContact());
+						console.log(editingContact());
 						event.preventDefault();
 					}}>
 					<div className="form-group">
@@ -83,7 +84,6 @@ export const EditContact = () => {
 							onClick={() => {
 								actions.editContact(editingContact());
 								event.preventDefault();
-								location.reload();
 							}}>
 							Save
 						</button>

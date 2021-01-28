@@ -1,31 +1,31 @@
-const getState = ({ getStore, setStore }) => {
+const getState = ({ getStore, setStore, getActions }) => {
 	return {
 		store: {
 			//Your data structures, A.K.A Entities
-			myList: [],
+			myContactList: [],
+			idToDelete: null,
 			idToEdit: null,
-			indexMyList: null,
-			idToDelete: null
+			indexToEdit: null
 		},
 		actions: {
 			//(Arrow) Functions that update the Store
 			// Remember to use the scope: scope.state.store & scope.setState()
-			getAgendaInfo: () => {
+			getContacts: () => {
 				fetch("https://assets.breatheco.de/apis/fake/contact/agenda/my_agenda_manuela")
 					.then(response => {
-						if (!response.ok) throw new Error(response.status);
+						if (!response.ok) {
+							throw new Error(response.status);
+						}
 						return response.json();
 					})
-					.then(jsonAgenda => {
-						setStore({ myList: jsonAgenda.flat() });
-						console.log("info, ", getStore().myList);
+					.then(jsonContacts => {
+						setStore({ myContactList: jsonContacts });
 					})
 					.catch(error => {
-						console.error("Can't get agenda information", error);
+						console.error("Error status: ", error);
 					});
 			},
-
-			createNewContact: object => {
+			addContact: object => {
 				fetch("https://assets.breatheco.de/apis/fake/contact/", {
 					method: "POST",
 					body: JSON.stringify(object),
@@ -39,27 +39,11 @@ const getState = ({ getStore, setStore }) => {
 						}
 						return response.json();
 					})
-					.catch(error => {
-						console.error("Can't add the contact to the agenda, error status: ", error);
-					});
-			},
-
-			editContact: object => {
-				fetch("https://assets.breatheco.de/apis/fake/contact/agenda/" + getStore().idToEdit, {
-					method: "PUT",
-					body: JSON.stringify(object),
-					headers: {
-						"Content-Type": "application/json"
-					}
-				})
-					.then(response => {
-						if (!response.ok) {
-							throw new Error(response.status);
-						}
-						return response.json();
+					.then(() => {
+						getActions().getContacts();
 					})
 					.catch(error => {
-						console.error("Can't edit contact, error status: ", error);
+						console.error("Creating contact, error status: ", error);
 					});
 			},
 			deleteContact: () => {
@@ -72,8 +56,32 @@ const getState = ({ getStore, setStore }) => {
 						}
 						return response.json();
 					})
+					.then(() => {
+						getActions().getContacts();
+					})
 					.catch(error => {
-						console.error("Can't delete the contact, error status: ", error);
+						console.error("Deleting contact, error status: ", error);
+					});
+			},
+			editContact: object => {
+				fetch("https://assets.breatheco.de/apis/fake/contact/" + getStore().idToEdit, {
+					method: "PUT",
+					body: JSON.stringify(object),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(response => {
+						if (!response.ok) {
+							throw new Error(response.status);
+						}
+						return response.json();
+					})
+					.then(() => {
+						getActions().getContacts();
+					})
+					.catch(error => {
+						console.error("Editing contact, error status: ", error);
 					});
 			}
 		}
